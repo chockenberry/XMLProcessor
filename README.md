@@ -1,5 +1,5 @@
 # XMLProcessor
-A simple XML parser for Swift.
+A simple XML parser that creates a JSON object graph in Swift.
 
 ## Example
 
