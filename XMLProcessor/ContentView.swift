@@ -43,6 +43,14 @@ struct ContentView: View {
 					if let (xml, _) = try? await URLSession.shared.data(from: url) {
 						let processor = XMLProcessor()
 						if let object = processor.parse(data: xml, debug: false) {
+							
+							// NOTE: At this point, the object can be turned into JSON with:
+							if let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]) {
+								if let debug = String(data: data, encoding: .utf8) {
+									print(debug)
+								}
+							}
+
 							// NOTE: It sure would be nice to have an easy way to unbox the feed Dictionary with a Decoder,
 							// but there isn't, so we'll just poke around in the data and unbox the values ourself.
 							if let feed = object["feed"] as? Dictionary<String,Any> {
@@ -51,7 +59,6 @@ struct ContentView: View {
 										if let entry = element as? Dictionary<String,Any> {
 											if let title = entry["title"] as? String,
 											   let published = entry["published"] as? String,
-											   //let content = entry["content"] as? String,
 											   let linkAttributes = entry["link$attrs"] as? Array<Any> {
 												var relatedLink: String?
 												var alternateLink: String?
